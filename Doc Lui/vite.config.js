@@ -1,6 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { resolve } from "node:path";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   base: "/Doc-Lui/",
@@ -12,8 +15,8 @@ export default defineConfig({
         services: resolve(__dirname, "services.html"),
         booking: resolve(__dirname, "booking.html"),
         requests: resolve(__dirname, "requests.html"),
-        contact: resolve(__dirname, "contact.html")
-      }
-    }
-  }
+        contact: resolve(__dirname, "contact.html"),
+      },
+    },
+  },
 });
