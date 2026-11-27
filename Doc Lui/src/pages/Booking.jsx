@@ -5,6 +5,7 @@ import surgery from "../../assets/surgery.jpg";
 import grooming from "../../assets/pet-grooming.jpg";
 import ultrasound from "../../assets/ultrasound.jpg";
 import { createAppointmentId, readAppointments, writeAppointments } from "../appointments";
+import { readAccess } from "../access";
 
 const services = [
   { title: "Major and minor surgeries", image: surgery, alt: "Major and minor veterinary surgery" },
@@ -25,7 +26,7 @@ const emptyForm = {
   notes: ""
 };
 
-function loadBookingState(editingId, selectedService) {
+function loadBookingState(editingId, selectedService, access) {
   try {
     const appointments = readAppointments();
     const existing = editingId ? appointments.find(item => item.id === editingId) : null;
@@ -33,7 +34,11 @@ function loadBookingState(editingId, selectedService) {
       appointments,
       form: existing
         ? { ...emptyForm, ...existing }
-        : { ...emptyForm, service: services.some(item => item.title === selectedService) ? selectedService : "" },
+        : {
+          ...emptyForm,
+          email: access?.role === "client" ? access.email : "",
+          service: services.some(item => item.title === selectedService) ? selectedService : ""
+        },
       error: ""
     };
   } catch (error) {
@@ -68,7 +73,8 @@ function Booking() {
   const navigate = useNavigate();
   const editingId = searchParams.get("edit");
   const requestedService = searchParams.get("service");
-  const [initialState] = useState(() => loadBookingState(editingId, requestedService));
+  const access = readAccess();
+  const [initialState] = useState(() => loadBookingState(editingId, requestedService, access));
   const [appointments, setAppointments] = useState(initialState.appointments);
   const [form, setForm] = useState(initialState.form);
   const [storageError, setStorageError] = useState(initialState.error);
@@ -105,6 +111,7 @@ function Booking() {
     const previous = appointments.find(item => item.id === id);
     const record = {
       ...form,
+      email: form.email.trim().toLowerCase(),
       id,
       status: previous?.status || "Pending",
       createdAt: previous?.createdAt || new Date().toISOString()
@@ -194,7 +201,16 @@ function Booking() {
             </label>
             <label className="text-sm font-bold">
               Email address <RequiredMarker value={form.email} />
-              <input className={inputClass} name="email" type="email" placeholder="juan.delacruz@gmail.com" value={form.email} onChange={updateField} required />
+              <input
+                className={inputClass}
+                name="email"
+                type="email"
+                placeholder="juan.delacruz@gmail.com"
+                value={form.email}
+                onChange={updateField}
+                readOnly={access?.role === "client"}
+                required
+              />
             </label>
             <label className="text-sm font-bold">
               Pet name <RequiredMarker value={form.petName} />

@@ -5,9 +5,9 @@ import dog from "../../assets/dog.jpg";
 import logo from "../../assets/logo.jpg";
 
 const slides = [
-  { image: cat, imageAlt: "Cat receiving veterinary care", caption: "Veterinary consultations" },
-  { image: dog, imageAlt: "Puppy receiving gentle care", caption: "Comfortable grooming care" },
-  { image: logo, imageAlt: "Doc Lui veterinary clinic logo", caption: "Medicine, care, and compassion" }
+  { image: cat, imageAlt: "Cat receiving veterinary care" },
+  { image: dog, imageAlt: "Puppy receiving gentle care" },
+  { image: logo, imageAlt: "Doc Lui veterinary clinic logo" }
 ];
 
 function Hero() {
@@ -40,7 +40,7 @@ function Hero() {
           <div className="carousel-dots">
             {slides.map((item, index) => (
               <button
-                key={item.caption}
+                key={item.imageAlt}
                 type="button"
                 className={index === current ? "active" : ""}
                 onClick={() => setCurrent(index)}
@@ -54,13 +54,6 @@ function Hero() {
 
       <div className="hero-visual">
         <img key={slide.image} src={slide.image} alt={slide.imageAlt} />
-        <div className="hero-caption">
-          <div>
-            <small>Today at Doc Lui</small>
-            <strong>{slide.caption}</strong>
-          </div>
-          <img src={logo} alt="" />
-        </div>
       </div>
     </section>
   );

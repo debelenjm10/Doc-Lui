@@ -8,7 +8,9 @@ import Booking from "./pages/Booking";
 import Contact from "./pages/Contact";
 import Requests from "./pages/Requests";
 import Services from "./pages/Services";
+import Login from "./pages/Login";
 import PageSkeleton from "./components/PageSkeleton";
+import { readAccess } from "./access";
 import logo from "../assets/logo.jpg";
 
 function App() {
@@ -33,7 +35,8 @@ function App() {
       "/services.html": "Services | Doc Lui",
       "/booking.html": "Book a Visit | Doc Lui",
       "/requests.html": "Appointment Requests | Doc Lui",
-      "/contact.html": "Contact | Doc Lui"
+      "/contact.html": "Contact | Doc Lui",
+      "/login.html": "Choose a Portal | Doc Lui"
     };
     document.title = titles[pathname] || "Doc Lui Veterinary Clinic";
     window.scrollTo(0, 0);
@@ -46,13 +49,14 @@ function App() {
       )}
       <Header logo={logo} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/index.html" element={<Home />} />
-        <Route path="/services.html" element={<Services />} />
-        <Route path="/booking.html" element={<Booking />} />
+        <Route path="/" element={<PortalLanding />} />
+        <Route path="/index.html" element={<ClientPortal><Home /></ClientPortal>} />
+        <Route path="/services.html" element={<ClientPortal><Services /></ClientPortal>} />
+        <Route path="/booking.html" element={<ClientPortal><Booking /></ClientPortal>} />
         <Route path="/requests.html" element={<Requests />} />
-        <Route path="/contact.html" element={<Contact />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/contact.html" element={<ClientPortal><Contact /></ClientPortal>} />
+        <Route path="/login.html" element={<Login />} />
+        <Route path="*" element={<PortalLanding />} />
       </Routes>
       <Footer />
     </div>
@@ -66,6 +70,22 @@ function Home() {
       <PopularServices />
     </main>
   );
+}
+
+function PortalLanding() {
+  const access = readAccess();
+  const destination = access?.role === "admin"
+    ? "/requests.html"
+    : access?.role === "client"
+      ? "/index.html"
+      : "/login.html";
+  return <Navigate to={destination} replace />;
+}
+
+function ClientPortal({ children }) {
+  const access = readAccess();
+  if (access?.role === "client") return children;
+  return <Navigate to={access?.role === "admin" ? "/requests.html" : "/login.html"} replace />;
 }
 
 export default App;

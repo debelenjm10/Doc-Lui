@@ -74,10 +74,11 @@ function initCarousel() {
   if (!slides.length) return;
   let current = 0;
   const images = [
-    { src: "assets/cat.jpg", alt: "Cat receiving veterinary care", caption: "Veterinary consultations" },
-    { src: "assets/dog.jpg", alt: "Puppy receiving gentle care", caption: "Comfortable grooming care" },
-    { src: "assets/logo.jpg", alt: "Doc Lui veterinary clinic logo", caption: "Medicine, care, and compassion" }
+    { src: "assets/cat.jpg", alt: "Cat receiving veterinary care" },
+    { src: "assets/dog.jpg", alt: "Puppy receiving gentle care" },
+    { src: "assets/logo.jpg", alt: "Doc Lui veterinary clinic logo" }
   ];
+  $("#heroCaption")?.remove();
   const show = index => {
     slides.forEach((slide, i) => slide.classList.toggle("active", i === index));
     $$(".carousel-dot").forEach((dot, i) => {
@@ -87,13 +88,11 @@ function initCarousel() {
     if (status) status.textContent = `${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
     const visual = $(".hero-visual");
     const heroImage = $("#heroImage");
-    const heroCaption = $("#heroCaption");
     if (visual && heroImage) {
       visual.classList.add("is-changing");
       window.setTimeout(() => {
         heroImage.src = images[index].src;
         heroImage.alt = images[index].alt;
-        if (heroCaption) heroCaption.textContent = images[index].caption;
         visual.classList.remove("is-changing");
       }, 180);
     }

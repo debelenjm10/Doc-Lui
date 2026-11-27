@@ -161,6 +161,30 @@ html.dark .contact-faq-answer { color: #cbd5e1; }
 .desktop-nav a.active { font-weight: 700; }
 .desktop-nav a:hover, .desktop-nav .active { color: #15803d; }
 .nav-actions { display: flex; gap: 8px; }
+.nav-login-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0fdf4;
+  color: #166534;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.nav-login-button:hover { background: #dcfce7; }
+.mobile-sign-out {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #166534;
+  text-align: left;
+  font-weight: 700;
+}
 .icon-button, .menu-button {
   height: 38px;
   min-width: 38px;
@@ -173,7 +197,113 @@ html.dark .contact-faq-answer { color: #cbd5e1; }
 .mobile-nav { padding: 12px 20px 16px; border-top: 1px solid #dcfce7; display: grid; gap: 12px; font-size: 14px; }
 html.dark .site-header, html.dark .site-footer { border-color: #1e293b; background: rgba(2,6,23,.95); }
 html.dark .icon-button, html.dark .menu-button { border-color: #334155; background: #0f172a; color: #4ade80; }
+html.dark .nav-login-button { border-color: #334155; background: #0f172a; color: #4ade80; }
+html.dark .nav-login-button:hover { background: #1e293b; }
+html.dark .mobile-sign-out { color: #4ade80; }
 html.dark .brand strong, html.dark .brand small { color: #4ade80; }
+
+.login-page { display: flex; align-items: center; }
+.login-card { width: 100%; background: #fff; }
+.login-brand { display: grid; justify-items: center; gap: 4px; text-align: center; }
+.login-logo {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 8px;
+  border: 3px solid #dcfce7;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.login-brand-name { color: #166534; font-size: 20px; font-weight: 900; line-height: 1.1; }
+.login-brand-caption { color: #64748b; font-size: 10px; font-weight: 700; letter-spacing: .18em; }
+.login-title { color: #0f172a; }
+.login-description { color: #64748b; }
+.login-role-switch { background: #f1f5f9; }
+.login-role-switch button {
+  border: 0;
+  border-radius: 9px;
+  padding: 9px 6px;
+  background: transparent;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+.login-role-switch button.active { background: #fff; color: #166534; box-shadow: 0 1px 4px rgba(15,23,42,.12); }
+.login-label { color: #334155; }
+.login-input, .request-reschedule-input {
+  border-color: #cbd5e1;
+  background: #fff;
+  color: #1e293b;
+}
+.login-input:focus { outline: 2px solid rgba(34,197,94,.2); border-color: #16a34a; }
+.login-password-control { position: relative; display: block; margin-top: 4px; }
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: 0;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #64748b;
+}
+.login-password-toggle:hover { background: #f0fdf4; color: #15803d; }
+.login-password-toggle svg { width: 19px; height: 19px; }
+.login-submit { background: #15803d; color: #fff; }
+.login-submit:hover { background: #166534; }
+.login-submit:disabled { cursor: wait; opacity: .7; }
+.login-mode-toggle { color: #15803d; }
+.login-demo-note { background: #f1f5f9; color: #475569; }
+.login-error { background: #fef2f2; color: #b91c1c; }
+.login-success { background: #f0fdf4; color: #166534; }
+.request-client-message { background: #eff6ff; color: #1d4ed8; }
+.request-accept { background: #dcfce7; color: #166534; }
+.request-accept:hover { background: #bbf7d0; }
+.request-decline { background: #fef2f2; color: #b91c1c; }
+.request-decline:hover { background: #fee2e2; }
+.request-reschedule { background: #eff6ff; color: #1d4ed8; }
+.request-reschedule:hover { background: #dbeafe; }
+.request-reschedule-input { min-width: 0; font-size: 12px; }
+.request-status.status-accepted { background: #dcfce7; color: #166534; }
+.request-status.status-declined { background: #fee2e2; color: #b91c1c; }
+.request-status.status-rescheduled { background: #dbeafe; color: #1d4ed8; }
+
+html.dark .login-card { background: #0f172a; }
+html.dark .login-logo { border-color: #334155; }
+html.dark .login-brand-name { color: #4ade80; }
+html.dark .login-brand-caption { color: #cbd5e1; }
+html.dark .login-title { color: #f8fafc; }
+html.dark .login-description { color: #cbd5e1; }
+html.dark .login-role-switch { background: #020617; }
+html.dark .login-role-switch button { color: #cbd5e1; }
+html.dark .login-role-switch button.active { background: #14532d; color: #dcfce7; }
+html.dark .login-label { color: #e2e8f0; }
+html.dark .login-input, html.dark .request-reschedule-input {
+  border-color: #475569;
+  background: #020617;
+  color: #f8fafc;
+  color-scheme: dark;
+}
+html.dark .login-password-toggle { color: #94a3b8; }
+html.dark .login-password-toggle:hover { background: #052e16; color: #4ade80; }
+html.dark .login-mode-toggle { color: #4ade80; }
+html.dark .login-demo-note { background: #1e293b; color: #cbd5e1; }
+html.dark .login-error { background: #450a0a; color: #fecaca; }
+html.dark .login-success { background: #052e16; color: #bbf7d0; }
+html.dark .request-client-message { background: #172554; color: #bfdbfe; }
+html.dark .request-accept { background: #052e16; color: #bbf7d0; }
+html.dark .request-accept:hover { background: #14532d; }
+html.dark .request-decline { background: #450a0a; color: #fecaca; }
+html.dark .request-decline:hover { background: #7f1d1d; }
+html.dark .request-reschedule { background: #172554; color: #bfdbfe; }
+html.dark .request-reschedule:hover { background: #1e3a8a; }
+html.dark .request-status.status-accepted { background: #052e16; color: #bbf7d0; }
+html.dark .request-status.status-declined { background: #450a0a; color: #fecaca; }
+html.dark .request-status.status-rescheduled { background: #172554; color: #bfdbfe; }
 
 .hero-section {
   width: min(1152px, calc(100% - 40px));
@@ -243,23 +373,6 @@ html.dark .brand strong, html.dark .brand small { color: #4ade80; }
   box-shadow: 0 16px 40px rgba(22,101,52,.12);
   animation: hero-fade .35s ease;
 }
-.hero-caption {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  left: 16px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255,255,255,.95);
-  box-shadow: 0 12px 30px rgba(15,23,42,.18);
-}
-.hero-caption div { display: grid; gap: 4px; }
-.hero-caption small { color: #15803d; font-size: 10px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.hero-caption strong { font-size: 14px; }
-.hero-caption img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 @keyframes hero-fade { from { opacity: .5; transform: scale(.985); } }
 
 .services-section { width: min(1152px, calc(100% - 40px)); margin: 0 auto; padding-bottom: 56px; }
@@ -285,11 +398,10 @@ html.dark .brand strong, html.dark .brand small { color: #4ade80; }
 .site-footer > div { width: min(1152px, calc(100% - 40px)); margin: 0 auto; padding: 24px 0; display: flex; justify-content: space-between; gap: 16px; color: #64748b; font-size: 14px; }
 .site-footer p { margin: 0; }
 html.dark .hero-copy h1, html.dark .section-heading h2, html.dark .service-card h3,
-html.dark .modal-card h3, html.dark .hero-caption strong { color: #f8fafc; }
+html.dark .modal-card h3 { color: #f8fafc; }
 html.dark .hero-copy > p, html.dark .service-card p, html.dark .modal-card p { color: #94a3b8; }
 html.dark .carousel-controls, html.dark .carousel-controls > button, html.dark .eyebrow { border-color: #334155; background: #0f172a; }
 html.dark .service-card, html.dark .modal-card { background: #0f172a; }
-html.dark .hero-caption { background: rgba(15,23,42,.95); color: white; }
 html.dark .carousel-controls, html.dark .carousel-controls > button { border-color: #334155; }
 
 .react-page-skeleton { position: fixed; inset: 74px 0 0; z-index: 100; overflow: auto; background: #f8fafc; }
@@ -326,6 +438,8 @@ html.dark .carousel-controls, html.dark .carousel-controls > button { border-col
 .skeleton-contact { align-items: stretch; grid-template-columns: 1fr .8fr; }
 .skeleton-contact-card { min-height: 410px; }
 .skeleton-faq-card { min-height: 300px; }
+.skeleton-login { width: min(840px, 100%); margin: 0 auto; display: grid; gap: 16px; }
+.skeleton-login-card { height: 180px; }
 html.dark .react-page-skeleton { background: #020617; }
 html.dark .skeleton-block { background: linear-gradient(90deg,#1e293b 25%,#334155 50%,#1e293b 75%); background-size: 200% 100%; }
 html.dark .skeleton-booking { background: #0f172a; }
@@ -371,6 +485,7 @@ html.dark .skeleton-booking { background: #0f172a; }
   .skeleton-search { width: 100%; }
   .skeleton-card-grid-two, .skeleton-card-grid-four { grid-template-columns: 1fr; }
   .skeleton-service-card { height: 300px; }
+  .skeleton-login-card { height: 150px; }
   .skeleton-booking { grid-template-columns: 1fr; }
   .skeleton-booking-image { display: none; }
   .skeleton-booking-form { padding: 24px; }

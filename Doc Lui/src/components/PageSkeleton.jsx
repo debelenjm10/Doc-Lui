@@ -11,6 +11,8 @@ function PageSkeleton({ pathname }) {
         ? "requests"
         : pathname === "/contact.html"
           ? "contact"
+          : pathname === "/login.html"
+            ? "login"
           : "home";
 
   return (
@@ -93,6 +95,17 @@ function PageSkeleton({ pathname }) {
           <div className="skeleton-contact">
             <SkeletonBlock className="skeleton-contact-card" />
             <SkeletonBlock className="skeleton-faq-card" />
+          </div>
+        )}
+
+        {page === "login" && (
+          <div className="skeleton-login">
+            <SkeletonBlock className="skeleton-eyebrow" />
+            <SkeletonBlock className="skeleton-heading-small" />
+            <div className="skeleton-card-grid skeleton-card-grid-two">
+              <SkeletonBlock className="skeleton-login-card" />
+              <SkeletonBlock className="skeleton-login-card" />
+            </div>
           </div>
         )}
       </div>
