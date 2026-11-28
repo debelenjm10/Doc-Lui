@@ -228,6 +228,7 @@ html.dark .brand strong, html.dark .brand small { color: #4ade80; }
   font-weight: 700;
 }
 .login-role-switch button.active { background: #fff; color: #166534; box-shadow: 0 1px 4px rgba(15,23,42,.12); }
+.login-role-switch button:disabled { cursor: not-allowed; opacity: .55; }
 .login-label { color: #334155; }
 .login-input, .request-reschedule-input {
   border-color: #cbd5e1;

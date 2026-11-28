@@ -64,9 +64,6 @@ export async function createAccount({ role, username, email = "", password }) {
   }
 
   const accounts = readAccounts();
-  if (role === "admin" && accounts.some(account => account.role === "admin")) {
-    throw new Error("An owner account already exists. Sign in with that account.");
-  }
   if (accounts.some(account => account.normalizedUsername === normalizedUsername)) {
     throw new Error("That username is already in use.");
   }

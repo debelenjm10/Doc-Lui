@@ -2,21 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { writeAccess } from "../access";
-import { authenticateAccount, createAccount, readAccounts } from "../accounts";
-
-function loadAdminAccount() {
-  try {
-    return {
-      account: readAccounts().find(account => account.role === "admin") ?? null,
-      error: ""
-    };
-  } catch (error) {
-    return {
-      account: null,
-      error: `Unable to load accounts: ${error.message}`
-    };
-  }
-}
+import { authenticateAccount, createAccount } from "../accounts";
 
 function PasswordField({ id, label, value, onChange, visible, onToggle, autoComplete }) {
   return (
@@ -54,7 +40,6 @@ function PasswordField({ id, label, value, onChange, visible, onToggle, autoComp
 function Login() {
   const [role, setRole] = useState("client");
   const [mode, setMode] = useState("login");
-  const [accountState, setAccountState] = useState(loadAdminAccount);
   const [identifier, setIdentifier] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -65,7 +50,6 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
 
@@ -74,7 +58,8 @@ function Login() {
   const confirmPassword = role === "admin" ? adminConfirmPassword : clientConfirmPassword;
   const setConfirmPassword = role === "admin" ? setAdminConfirmPassword : setClientConfirmPassword;
   const isClientSignup = role === "client" && mode === "signup";
-  const isOwnerSetup = role === "admin" && !accountState.account;
+  const isAdminSignup = role === "admin" && mode === "signup";
+  const isSignup = isClientSignup || isAdminSignup;
 
   const selectRole = nextRole => {
     setRole(nextRole);
@@ -86,46 +71,39 @@ function Login() {
     setShowPassword(false);
     setShowConfirmPassword(false);
     setError("");
-    setMessage("");
-    if (nextRole === "admin" && accountState.account) {
-      setUsername(accountState.account.username);
-    }
   };
 
-  const toggleClientMode = () => {
+  const toggleSignupMode = () => {
     setMode(current => current === "signup" ? "login" : "signup");
     setClientPassword("");
+    setAdminPassword("");
     setClientConfirmPassword("");
+    setAdminConfirmPassword("");
     setShowPassword(false);
     setShowConfirmPassword(false);
     setError("");
-    setMessage("");
   };
 
   const submit = async event => {
     event.preventDefault();
     setError("");
-    setMessage("");
 
-    if ((isClientSignup || isOwnerSetup) && password !== confirmPassword) {
+    if (isSignup && password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
     setBusy(true);
     try {
-      if (isOwnerSetup) {
-        const account = await createAccount({ role, username, password });
-        setAccountState({ account, error: "" });
-        setUsername(account.username);
-        setMessage(`Owner account created: ${account.username}. Sign in with the password you just chose.`);
-        return;
-      }
-
-      if (isClientSignup) {
-        const account = await createAccount({ role, username, email, password });
+      if (isSignup) {
+        const account = await createAccount({
+          role,
+          username,
+          email: isClientSignup ? email : "",
+          password
+        });
         writeAccess({ role: account.role, email: account.email });
-        navigate("/index.html");
+        navigate(account.role === "admin" ? "/requests.html" : "/index.html");
         return;
       }
 
@@ -173,19 +151,13 @@ function Login() {
           </button>
         </div>
 
-        {(accountState.error || error) && (
+        {error && (
           <p className="login-error mt-4 rounded-lg px-3 py-2 text-sm" role="alert">
-            {error || accountState.error}
+            {error}
           </p>
         )}
-        {message && (
-          <p className="login-success mt-4 rounded-lg px-3 py-2 text-sm" role="status">
-            {message}
-          </p>
-        )}
-
         <form className="login-form mt-5 grid gap-4" onSubmit={submit}>
-          {role === "client" && isClientSignup && (
+          {isSignup && (
             <>
               <label className="login-label text-sm font-bold">
                 Username
@@ -197,17 +169,19 @@ function Login() {
                   required
                 />
               </label>
-              <label className="login-label text-sm font-bold">
-                Email
-                <input
-                  className="login-input mt-1 w-full rounded-lg border px-3 py-2.5 font-normal"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={event => setEmail(event.target.value)}
-                  required
-                />
-              </label>
+              {isClientSignup && (
+                <label className="login-label text-sm font-bold">
+                  Email
+                  <input
+                    className="login-input mt-1 w-full rounded-lg border px-3 py-2.5 font-normal"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={event => setEmail(event.target.value)}
+                    required
+                  />
+                </label>
+              )}
             </>
           )}
 
@@ -244,10 +218,10 @@ function Login() {
             onChange={event => setPassword(event.target.value)}
             visible={showPassword}
             onToggle={() => setShowPassword(current => !current)}
-            autoComplete={isClientSignup || isOwnerSetup ? "new-password" : "current-password"}
+            autoComplete={isSignup ? "new-password" : "current-password"}
           />
 
-          {(isClientSignup || isOwnerSetup) && (
+          {isSignup && (
             <PasswordField
               id="login-confirm-password"
               label="Confirm password"
@@ -262,23 +236,25 @@ function Login() {
           <button className="login-submit rounded-lg px-4 py-3 text-sm font-bold" type="submit" disabled={busy}>
             {busy
               ? "Please wait..."
-              : isOwnerSetup
-                ? "Create owner account"
-                : isClientSignup
-                  ? "Create client account"
-                  : "Log in"}
+              : isSignup
+                ? isAdminSignup ? "Create admin account" : "Create client account"
+                : "Log in"}
           </button>
         </form>
 
-        {role === "client" && (
-          <button className="login-mode-toggle mt-4 text-sm font-bold" type="button" onClick={toggleClientMode}>
-            {isClientSignup ? "Already have an account? Log in" : "New client? Create an account"}
+        {(role === "client" || role === "admin") && (
+          <button className="login-mode-toggle mt-4 text-sm font-bold" type="button" onClick={toggleSignupMode}>
+            {mode === "signup"
+              ? "Already have an account? Log in"
+              : role === "admin"
+                ? "New admin? Create an account"
+                : "New client? Create an account"}
           </button>
         )}
 
-        {isOwnerSetup && (
+        {isAdminSignup && (
           <p className="login-demo-note mt-4 text-xs leading-5">
-            Create your username and password once on this device. The password is stored as a salted hash.
+            Your password is stored as a salted hash.
           </p>
         )}
       </section>
